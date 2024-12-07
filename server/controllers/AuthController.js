@@ -1,4 +1,4 @@
-import { response } from "express";
+// import { response } from "express";
 import User from "../models/UserModel.js";
 import jwt from 'jsonwebtoken';
 
@@ -13,6 +13,11 @@ export const signup = async (request, response, next) => {
         if (!email || !password) {
             return response.status(400).send("Email and Password is required")
         }
+        // Check if a user with the same email already exists
+        // const existingUser = await User.findOne({ email });
+        // if (existingUser) {
+        //     return response.status(409).json({ error: "Email is already in use" }); // 409 Conflict
+        // }
         const user = await User.create({ email, password });
         response.cookie('jwt', createToken(email, user.id), {
             maxAge,
@@ -22,12 +27,12 @@ export const signup = async (request, response, next) => {
         return response.status(201).json({
             user: {
                 id: user.id,
-                email: user.id,
-                profileSetUp: user.profileSetup,
+                email: user.email,
+                profileSetup: user.profileSetup,
             },
         })
     } catch (error) {
-        console.log(error);
+        console.log({error});
         return response.status(500).send("Internal Server Error");
     }
 };

@@ -4,14 +4,38 @@ import Victory from "@/assets/victory.svg";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { apiClient } from "@/lib/api-client"; 
+import { SIGNUP_ROUTE } from "@/utils/constants";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const validateSignup = () => {
+    if (!email.length) {
+      toast.error('Email is required');
+      return false;
+    }
+    if (!password.length) {
+      toast.error('Password is required');
+      return false;
+    }
+    if (password !== confirmPassword) {
+      toast.error('Both passwords must be same');
+      return false;
+    }
+    return true;
+  }
+
   const handleLogin = async () => {};
-  const handleSignUp = async () => {};
+  const handleSignUp = async () => {
+    if (validateSignup()) {
+      const response = await apiClient.post(SIGNUP_ROUTE, { email, password });
+      console.log({ response });
+    }
+  };
 
   return (
     <div className="h-[100vh] w-[100vw] flex items-center justify-center">
@@ -42,14 +66,14 @@ const Auth = () => {
                   type="email"
                   className="rounded-full p-6"
                   value={email}
-                  onChange={(e) => setEmail(e.target.vaue)}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
                 <Input
                   placeholder="password"
                   type="password"
                   className="rounded-full p-6"
                   value={password}
-                  onChange={(e) => setPassword(e.target.vaue)}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
                 <Button className="rounded-full p-6" onClick={handleLogin}>Login</Button>
               </TabsContent>
@@ -59,21 +83,21 @@ const Auth = () => {
                   type="email"
                   className="rounded-full p-6"
                   value={email}
-                  onChange={(e) => setEmail(e.target.vaue)}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
                 <Input
                   placeholder="password"
                   type="password"
                   className="rounded-full p-6"
                   value={password}
-                  onChange={(e) => setPassword(e.target.vaue)}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
                 <Input
                   placeholder="Confirm password"
                   type="password"
                   className="rounded-full p-6"
                   value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.vaue)}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                 />
                 <Button className="rounded-full p-6" onClick={handleSignUp}>SignUp</Button>
               </TabsContent>

@@ -5,34 +5,60 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { apiClient } from "@/lib/api-client"; 
-import { SIGNUP_ROUTE } from "@/utils/constants";
+import { apiClient } from "@/lib/api-client";
+import { LOGIN_ROUTE, SIGNUP_ROUTE } from "@/utils/constants";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const validateSignup = () => {
+  const validateLogin = () => {
     if (!email.length) {
-      toast.error('Email is required');
+      toast.error("Email is required");
       return false;
     }
     if (!password.length) {
-      toast.error('Password is required');
-      return false;
-    }
-    if (password !== confirmPassword) {
-      toast.error('Both passwords must be same');
+      toast.error("Password is required");
       return false;
     }
     return true;
-  }
+  };
 
-  const handleLogin = async () => {};
+  const validateSignup = () => {
+    if (!email.length) {
+      toast.error("Email is required");
+      return false;
+    }
+    if (!password.length) {
+      toast.error("Password is required");
+      return false;
+    }
+    if (password !== confirmPassword) {
+      toast.error("Both passwords must be same");
+      return false;
+    }
+    return true;
+  };
+
+  const handleLogin = async () => { 
+    if (validateLogin()) {
+      const response = await apiClient.post(
+        LOGIN_ROUTE,
+        { email, password },
+        { withCredentials: true }
+      );
+      console.log({ response });
+    }
+  };
+  
   const handleSignUp = async () => {
     if (validateSignup()) {
-      const response = await apiClient.post(SIGNUP_ROUTE, { email, password });
+      const response = await apiClient.post(
+        SIGNUP_ROUTE,
+        { email, password },
+        { withCredentials: true }
+      );
       console.log({ response });
     }
   };
@@ -75,7 +101,9 @@ const Auth = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
-                <Button className="rounded-full p-6" onClick={handleLogin}>Login</Button>
+                <Button className="rounded-full p-6" onClick={handleLogin}>
+                  Login
+                </Button>
               </TabsContent>
               <TabsContent className="flex flex-col gap-3" value="signup">
                 <Input
@@ -99,7 +127,9 @@ const Auth = () => {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 />
-                <Button className="rounded-full p-6" onClick={handleSignUp}>SignUp</Button>
+                <Button className="rounded-full p-6" onClick={handleSignUp}>
+                  SignUp
+                </Button>
               </TabsContent>
             </Tabs>
           </div>

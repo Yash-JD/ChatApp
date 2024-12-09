@@ -1,9 +1,19 @@
-const Chat = () => {
-  return (
-    <div>
-      Chat
-    </div>
-  )
-}
+import { useEffect } from "react";
+import { useAppStore } from "../../store";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
-export default Chat
+const Chat = () => {
+  const { userInfo } = useAppStore();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!userInfo.profiSetup) {
+      toast("Please setup profile to continue.");
+      navigate("/profile");
+    }
+  }, [userInfo, navigate]);
+
+  return <div>Chat</div>;
+};
+
+export default Chat;

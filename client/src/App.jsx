@@ -8,15 +8,15 @@ import { useAppStore } from "./store";
 import { apiClient } from "@/lib/api-client";
 import { GET_USER_INFO } from "@/utils/constants";
 
-const privateRoute = ({ Children }) => {
+const privateRoute = ({ children }) => {
   const { userInfo } = useAppStore();
   const isAuthenticated = !!userInfo;
-  return isAuthenticated ? Children : <Navigate to="/auth" />;
+  return isAuthenticated ? children : <Navigate to="/auth" />;
 };
-const AuthRoute = ({ Children }) => {
+const AuthRoute = ({ children }) => {
   const { userInfo } = useAppStore();
   const isAuthenticated = !!userInfo;
-  return isAuthenticated ? <Navigate to="/chat" /> : Children;
+  return isAuthenticated ? <Navigate to="/chat" /> : children;
 };
 
 const App = () => {
@@ -89,3 +89,4 @@ export default App;
 
 // https://gist.github.com/koolkishan/8b590127ab27e3bdea1f39649f3ee8e9
 // https://gist.github.com/koolkishan/b186b8eab5dbbaee383fd8f79f25eca9
+// changes if needed: app.jsx - children->Children

@@ -73,6 +73,7 @@ export const login = async (request, response, next) => {
 
 export const getUserInfo = async (request, response, next) => {
     try {
+        // console.log(request.UserId)
         const userData = await User.findById(request.UserId);
         if (!userData) {
             return response.status(404).send("User with given id not found")
